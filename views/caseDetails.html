@@ -110,17 +110,15 @@ float: right;
 </div>
 
 <div class="bg-img">
-		<form action="addCriminal" method="POST" class="container">
-			<p>Add a criminal</p>
-				<input type="text" name="fname" placeholder="First name" required>
-							<input type="text" name="lname" placeholder="Last name" required>
-							<input type="number" name="pid" placeholder="prisoner id" required>
-							<input type="text" name="address" placeholder="address" />
+		<form action="addCase" method="POST" class="container">
+			<p>Add case details</p>
+							<input type="number" name="pid" value="<%= pid %>" required>
+                            <input type="number" name="caseid" placeholder="caseid" />
 							
-							<input type="date" name="doi" placeholder="date of in" />
-							<input type="date" name="dou" placeholder="Date of out" />
-							<input type="number" name="age" placeholder="age" />
-							<input type="numer" name="section_id" value='<%= sid %>' placeholder="address" />
+                            <input type="text" name="casetype" placeholder="casetype" />
+							
+							<input type="date" name="doc" placeholder="date of crime" />
+							<input type="time" name="toc" placeholder="timing of crime" />
 							
 							<input type="submit">
 							</form>

@@ -15,7 +15,7 @@ var connection = mysql.createConnection({
 
 var app = express();
 app.set('html');
-app.use(session({
+app.use(session({ 
 	secret: 'secret',
 	resave: true,
 	saveUninitialized: true
@@ -135,10 +135,39 @@ app.get('/rouVis', function(req, res) {
 res.render('addVisitor.html',{id:id});
 });
 
+app.get('/logout', function(req, res) {
+	req.session.destroy(function(err){
+		res.redirect('/');
+	})
+});
+
+
 app.get('/rouCriminal', function(req, res) {
   sid=req.query['category'];
 res.render('addCriminal.html',{sid:sid});
 });
+
+app.get('/getHome', function(request,response) {
+	var prisoners=[];
+	connection.query('SELECT * FROM prisoners p where p.section_id  = (select section_id from prisoners where prisoner_id=? )',request.query['category'],
+			function(error, results, fields) {
+			 console.log(results);
+			for(var i=0;i<=results.length-1;i++)
+			 	{prisoners.push(results[i]);
+			 		//priso.push(results[i].prisoner_id);
+			 	}
+		console.log(prisoners);
+		// for(var i=0;i<=1;i++)
+		 //		console.log(prisoners[i]);	
+	 connection.query('SELECT admin_id FROM section where section_id=?',prisoners[0].section_id,function(error, results, fields) {
+	        adminid=results[0].admin_id;
+			response.render('home.html',{id:adminid,prisoners:prisoners,sid:prisoners[0].section_id});
+
+		});	
+  });
+  	
+});
+  
 
 app.post('/addVis',function(request,response){
 fname=request.body.fname;
@@ -168,6 +197,22 @@ var res=[];
 		}
 });
 
+app.post('/addCase',function(request,response){
+	pid=request.body.pid;
+	cid=request.body.caseid;
+	casetype=request.body.casetype;
+	doc=request.body.doc;
+	toc=request.body.toc;
+	connection.query('insert into commited values(?,?)',[cid,pid],function(error,result,fields){
+							  if(error)console.log("error");
+							  connection.query('insert into cases values(?,?,?,?)',[cid,casetype,doc,toc]);
+							  connection.query('SELECT * FROM prisoners WHERE prisoner_id=?', pid , function(error, results, fields) {
+							  		response.render('prisoner.html',{prisoner:results});
+							  });
+							});
+							});
+		
+
 app.post('/addCriminal',function(request,response){
 fname=request.body.fname;
 lname=request.body.lname;
@@ -177,16 +222,17 @@ datei=request.body.doi;
 datej=request.body.dou;
 age=request.body.age;
 sid=request.body.section_id;
-cid=request.body.cid;
+//cid=request.body.cid;
 var res=[];
 	if (fname && lname && sid) {                                                                                                                            
 		connection.query('insert into prisoners values (?,?,?,?,?,?,?,?)', [pid,fname,lname,address,datei,datej,age,sid] , function(error, results, fields) {
 			 if(error)console.log("error");
-			 connection.query('insert into commited values(?,?)',[cid,pid],function(error,result,fields){
-					  if(error)console.log("error");
+			 response.render('caseDetails.html',{pid:pid});
+//			 connection.query('insert into commited values(?,?)',[cid,pid],function(error,result,fields){
+//					  if(error)console.log("error");
 			
-});
-response.redirect('/home');	
+//});
+
 response.end();	
 });
 	}else {
@@ -245,7 +291,7 @@ var priso=[];
 		console.log(prisoners);
 		 for(var i=0;i<=1;i++)
 		 		console.log(prisoners[i]);	
-	  response.render('home.html',{username:username,prisoners:prisoners,sid:prisoners[0].section_id});
+	  response.render('home.html',{id:id,prisoners:prisoners,sid:prisoners[0].section_id});
 		 
 	});
 		

@@ -89,9 +89,16 @@ overflow: hidden;
 	<body>
 			
 				<div class="topnav">
-					<a class="active" href="/">PRISONXT</a>
-					<div class="topnav-right">
-						<a href='/home'>Back</a>
+            <% prisoner.forEach(function(pris) { %>
+          <a class="active" href="/getHome?category=<%= pris.prisoner_id %>'">PRISONXT</a>
+          <% }); %>  
+          <div class="topnav-right">
+           
+            <% prisoner.forEach(function(pris) { %>
+            <a class="active" onclick="window.location.href='/getHome?category=<%= pris.prisoner_id %>'"> Back</a>
+          <% }); %>    
+            <a class="active" onclick="window.location.href='/logout' ">LOGOUT</a>
+                            
 					</div>
 			  </div>
 					<div class="container">

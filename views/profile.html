@@ -15,30 +15,13 @@
   color: grey;
   font-size: 18px;
 }
-
-
-
-a {
-  text-decoration: none;
-  font-size: 22px;
-  color: black;
-}
-
 .topnav {
 background-color: #333;
 overflow: hidden;
 }
 
 /* Style the links inside the navigation bar */
-.btn {
-  background-color: #4CAF50;
-  color: white;
-  padding: 16px 20px;
-  border: none;
-  cursor: pointer;
-  width: 100%;
-  opacity: 0.9;
-}
+
 
 .btn:hover {
   opacity: 1;}
@@ -74,25 +57,50 @@ overflow: hidden;
 .topnav-right {
   float: right;
 }
-* {
-  box-sizing: border-box;
+
+	.bg-image {
+  /* The image used */
+  background-image: url("https://images.unsplash.com/photo-1546450334-03038e2eaa39?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=753&q=80");
+
+  /* Add the blur effect */
+  filter: blur(8px);
+  -webkit-filter: blur(8px);
+
+  /* Full height */
+  height: 100%;
+  min-height: 300px;
+  /* Center and scale the image nicely */
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
+.btn {
+  background-color: #4CAF50;
+  color: white;
+  padding: 16px 20px;
+  border: none;
+  cursor: pointer;
+  width: 8%;
+  opacity: 0.9;
+}
+
+
 </style>
         </head>
         <body>
              <div>
                <div class="topnav">
-                        <button class="active" onclick="window.location.href='/'">PRISONXT</button>
+                        <a class="active" onclick="window.location.href='/'">PRISONXT</button>
                         <div class="topnav-right">
-                        <button class="active" onclick="window.location.href='/home'">BACK</button>
+                        <a class="active" onclick="window.location.href='/home'">BACK</button>
                     </div>
              </div>
              <div class="card">
                     <% officers.forEach(function(off) {
                         off.imag = new Buffer(off.imag).toString('base64');
                          %> 
-                           <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1000&q=80"  style="width:100%">
-                        
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1000&q=80"  style="width:100%"> 
+                      
                             <h1><%= off.fname %></h1>
                             <p class="title"> <%= off.job_title %> </p>
                             <% }); %>
