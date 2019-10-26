@@ -1,11 +1,11 @@
 <html>
-		<html lang="en">
+        <html lang="en">
 				<head>
 					<meta charset="utf-8">
 					<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 					<meta charset="utf-8">
 					<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-					<title>Login</title>
+				
 					<style>
 							body, html {
   height: 100%;
@@ -20,7 +20,7 @@
   background-image: url("https://images.unsplash.com/photo-1546450334-5a84ac3a1f0e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=753&q=80");
 
   /* Control the height of the image */
-  min-height: 544px;
+  min-height: 854px;
 
   /* Center and scale the image nicely */
   background-position: center;
@@ -32,10 +32,10 @@
 /* Add styles to the form container */
 .container {
   position: absolute;
-  right: 0;
+  right: 450;
   margin: 20px;
-  max-width: 300px;
-  padding: 16px;
+  max-width: 280px;
+  padding: 18px;
   background-color: white;
 }
 
@@ -98,33 +98,33 @@ input[type=text]:focus, input[type=password]:focus {
 .topnav-right {
   float: right;
 }
-</style>
-</head>
 
+					</style></head>
 <body>
 
 		<div class="topnav">
-        <a class="inactive" href="/">PRISONXT</a>
-        <div class="topnav-right">
-            <a class="active" onclick="window.location.href='/appoint?category=<%= id %>' ">BACK</a>                 
-        </div>
+				<a class="active" href="/getHome?category=<%= id %>'">PRISONXT</a>
 		</div>
 
 
-	<div class="bg-img">
-	<form action="addVis" method="POST" class="container">
-				<input type="text" name="fname" placeholder="First name" required>
-				<input type="text" name="lname" placeholder="Last name" required>
-				<input type="number" name="vid" placeholder="visitor id" required>
-				<input type="number" name="id" placeholder="Prisoners id" value=<%= id %> />
-				<button type="submit" class="btn">Submit</button>
-			
 
-			</form>
-		</div>
-		<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-	
-</body>
+		<div class="bg-img">
+                                
+        <form action="updateVisitor" method="POST" class="container">
+                <p>Edit visitors details</p>
+                
+                   
+                 <% visitor.forEach(function(vis) { %>
+                       <p> First Name: <input type="text" name="fname" placeholder="First name" value='<%= vis.vfname %>' required> </p>
+                        <p> Last Name: <input type="text" name="lname" placeholder="Last name" value='<%= vis.vlname %>' required> </p>
+                      <p>Visitor id:  <input type="number" name="vid" placeholder="visitor id" value='<%= vis.visitor_id %>' required></p>
+                      <p>Prisoner id:  <input type="number" name="pid" placeholder="Prisoners id" value='<%= id %>' /> </p>
+                        <p> Appointment Time: <input type="time" name="appnttime" placeholder="appnt time" value='<%= vis.appnt_time %>' required> </p>
+                         <p> Appointmnt Date:  <input type="date" name="appntdate" placeholder="appnt date" value='<%= vis.appnt_date %>' /></p>
+                        <p> Appointmnt Status: <input type="text" name="status" placeholder="status" value='<%= vis.appnt_status %>' /> </p>
+                         <% }); %>
+                          <input type="submit">
+                           
+                            </form>
+                            
 </html>

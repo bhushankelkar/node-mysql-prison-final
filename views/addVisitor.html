@@ -103,9 +103,9 @@ input[type=text]:focus, input[type=password]:focus {
 <body>
 
 		<div class="topnav">
-        <a class="active" href="/">PRISONXT</a>
+        <a class="active" href="/getHome?category=<%= id %>'">PRISONXT</a>
         <div class="topnav-right">
-            <a href='/visitors'>Back</a>
+          
 		</div>
   </div>
 
@@ -116,7 +116,10 @@ input[type=text]:focus, input[type=password]:focus {
 				<input type="text" name="fname" placeholder="First name" required>
 				<input type="text" name="lname" placeholder="Last name" required>
 				<input type="number" name="vid" placeholder="visitor id" required>
-				<input type="number" name="id" placeholder="Prisoners id" value='<%= id %>' />
+        <input type="number" name="id" placeholder="Prisoners id" value='<%= id %>' />
+        <input type="time" name="appnttime" placeholder="Appnt Time" required>
+        <input type="date" name="appntdate" placeholder="Appnt Date" required>
+			  <input type="text" name="status" placeholder="status" value="Not Visited" required>
 				<button type="submit">Submit</button>
 			
 

@@ -30,7 +30,7 @@ app.get('/', function(request, response) {
 	response.sendFile(path.join(__dirname + '/login.html'));
 });
 
-app.get('/delete', function(req, res) {
+/*app.get('/delete', function(req, res) {
     connection.query("select visitor_id FROM has WHERE prisoner_id = ?", req.query['category'] , function(error, results, fields) {
    vid=results[0].visitor_id;
    pid=req.query['category'];
@@ -44,7 +44,7 @@ app.get('/delete', function(req, res) {
 	  });
 	});
 	});
-});
+});*/
 app.get('/deletep', function(req, res) {
     connection.query('DELETE FROM prisoners WHERE prisoner_id=?', req.query['category'] , function(error, results, fields) {
 		   console.log(results);
@@ -70,6 +70,8 @@ connection.query('SELECT * FROM visitors WHERE visitor_id in (select visitor_id 
 });
 });
 
+
+
 app.get('/profile', function(req, res) {
   
 	connection.query('SELECT * FROM officers WHERE admin_id=?', req.query['category'] , function(error, results, fields) {
@@ -85,6 +87,37 @@ app.get('/routeBack', function(req, res) {
 		res.render('prisoner.html',{prisoner:results});
 	});
 	});
+	
+app.get('/editv', function(req, res) {
+		//connection.query('SELECT case_id FROM commited c,prisoners p where p.prisoner_id=? and p.prisoner_id=c.prisoner_id',req.query['category'] , function(error, results, fields) {
+		  // var temp=[];
+		   //temp=results;
+			//console.log(results[6]);
+			connection.query('SELECT * FROM has h,visitors v where h.prisoner_id=?',req.query['category'],function(error, results, fields){
+			res.render('editVisitor.html',{visitor:results,id:req.query['category']});
+			
+		});
+	  
+});
+
+app.post('/search', function(req, res) {
+		name=req.body.search;
+		
+		connection.query('select section_id from prisoners where match (pfname,lname) against (? in natural language mode)' ,[name] , function(error, results, fields) {
+			secid=results[0];
+			connection.query('SELECT admin_id FROM section where section_id=?',secid,function(error, results, fields) {
+				adminid=results[0].admin_id;
+				connection.query('select * from prisoners where match (pfname,lname) against (? in natural language mode)' ,[name] , function(error, results, fields) {
+		
+			     res.render('home.html',{id:adminid,prisoners:results,sid:secid});
+				});	
+		});
+		});
+		});
+		
+	
+
+
 
 app.get('/edit', function(req, res) {
 	connection.query('SELECT case_id FROM commited c,prisoners p where p.prisoner_id=? and p.prisoner_id=c.prisoner_id',req.query['category'] , function(error, results, fields) {
@@ -129,7 +162,40 @@ app.get('/edit', function(req, res) {
 	   response.end();
 
 });	
+
+app.post('/updateVisitor',function(request,response){
+	fname=request.body.fname;
+	 lname=request.body.lname;
+	pid=request.body.pid;
+	 appnttime=request.body.appnttime;
+	appntdate=request.body.appntdate;
+	 status=request.body.status;
+	  vid=request.body.vid;
+//	 connection.query('SELECT * from prisoners where prisoner_id=?',request.query['category'],function(error,results,fields){
+	//  pid=results[0].prisoner_id;
+		if(fname && pid)
+		connection.query('UPDATE visitors set vfname=? where visitor_id=?',[fname,vid]); 
+	//	connection.query('UPDATE prisoners p set p.pfname=?,p.lname=?,p.prisoner_id=?,p.paddress=?,p.dateofin=?,p.dateofin=?,p.dateofout=?,p.age=? where prisoner_id=pid',[fname,lname,pid,address,datei,datej,age],function(error, results, fields){
+		if(lname && pid)
+		connection.query('UPDATE visitors set vlname=? where visitor_id=?',[lname,vid]); 
+	    if(appnttime && pid) 
+		connection.query('UPDATE visitors set appnt_time=? where visitor_id=?',[appnttime,vid]);	
+	    if(appntdate && pid) 
+		connection.query('UPDATE visitors set appnt_date=? where visitor_id=?',[appntdate,vid]);
+		if(status && pid) 
+		connection.query('UPDATE visitors set appnt_status=? where visitor_id=?',[status,vid]);
 	
+	//	if(vid && pid)
+	//	connection.query('UPDATE commited set visitor_id=? where visitor_id=?',[cid,vid]);
+		
+	connection.query('SELECT * FROM visitors WHERE visitor_id=?',vid, function(error, results, fields) {
+		console.log(results);
+		response.render('visitors.html',{visitors:results,id:pid});
+		});
+
+});	
+
+
 app.get('/rouVis', function(req, res) {
 	id=req.query['category'];
 res.render('addVisitor.html',{id:id});
@@ -174,26 +240,41 @@ fname=request.body.fname;
 lname=request.body.lname;
 vid=request.body.vid;
 pid=request.body.id;
+appnttime=request.body.appnttime;
+appntdate=request.body.appntdate;
+status=request.body.status;
 console.log(fname);
 console.log(lname);
 console.log(vid);
 console.log(pid);
+console.log(appnttime);
+console.log(appntdate);
+console.log(status);
+
+
+
 var res=[];
 	if (fname && lname && vid) {     
 		//connection.query('insert into has values(?,?)',[vid,pid],function(error,result,fields){
-     connection.query('insert into visitors values(?,?,?)', [vid,fname,lname] , function(error, results, fields) {
-			 if(error)console.log("error");
-			 connection.query('insert into has values(?,?)',[vid,pid],function(error,result,fields){
- 				if(error)console.log("error");
-		});
+     connection.query('insert into visitors values(?,?,?,?,?,?)', [vid,fname,lname,appnttime,status,appntdate] , function(error, results, fields) {
+		 console.log(results);	 
+		if(error)console.log("error");
+			});
+			 connection.query('insert into has values(?,?)',[vid,pid],function(error,results,fields){
+				console.log(results);
+				if(error)console.log("error");
+		
+	});
 	// connection.query('SELECT * FROM prisoners WHERE prisoner_id=?',[pid],function(error, results, fields) {
 	//	res.render('prisoner.html',{prisoner:results});
-	    connection.query('SELECT * FROM visitors WHERE visitor_id in (select visitor_id from has where prisoner_id=?)',[pid] ,function(error, results, fields) {
-		response.render('visitors.html',{visitors:results,id:pid}); 
+	connection.query('SELECT * FROM visitors WHERE visitor_id in (select visitor_id from has where prisoner_id=?)',pid, function(error, results, fields) {
+		console.log(results);
+		response.render('visitors.html',{visitors:results,id:pid});
+	
 	  });
 	 	//response.redirect('/visitors');	
 			//response.end();
-	 });
+	 
 		}
 });
 
@@ -242,32 +323,32 @@ response.end();
 });
 
 app.post('/auth', function(request, response) {
-	username = request.body.username;
+	email = request.body.email;
 	 password = request.body.password;
 	
-	if (username && password) {
-		connection.query('SELECT * FROM login WHERE username = ? AND password = ?', [username, password] , function(error, results, fields) {
+	if (email && password) {
+		connection.query('SELECT * FROM login WHERE emailid = ? AND password = ?', [email, password] , function(error, results, fields) {
 			 if (results.length > 0) {
 
 			 	console.log(results);
 			 	request.session.loggedin = true;
-			 	request.session.username = results.username;
+			 	request.session.email = results.emailid;
 			 	request.session.password=results.password;
 			 	id=results[0].admin_id;
 			 	
-			 	console.log(username);
+			 	//console.log(username);
 			 	console.log(password);
 			 	console.log(id);
 				response.redirect('/home');
 			 } else {
-			 	response.send('Incorrect Username and/or Password!');
+			 	response.send('Incorrect emailid and/or Password!');
 			 }		
 			// console.log(results.username);
 
 			response.end();
 		});
 	} else {
-		response.send('Please enter Username and Password!');
+		response.send('Please enter Email Id and Password!');
 		response.end();
 	}
 });

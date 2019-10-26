@@ -5,7 +5,7 @@
             <meta charset="utf-8">
             <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
             <style>
-            .topnav {
+               .topnav {
 background-color: #333;
 overflow: hidden;
 }
@@ -56,28 +56,37 @@ overflow: hidden;
   float: right;
 }
 
-.bg-image {
-/* The image used */
-background-image: url("https://images.unsplash.com/photo-1546450334-03038e2eaa39?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=753&q=80");
+	.bg-image {
+  /* The image used */
+  background-image: url("https://images.unsplash.com/photo-1546450334-03038e2eaa39?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=753&q=80");
 
-/* Add the blur effect */
-filter: blur(8px);
--webkit-filter: blur(8px);
+  /* Add the blur effect */
+  filter: blur(8px);
+  -webkit-filter: blur(8px);
 
-/* Full height */
-height: 100%;
-min-height: 300px;
-/* Center and scale the image nicely */
-background-position: center;
-background-repeat: no-repeat;
-background-size: cover;
+  /* Full height */
+  height: 100%;
+  min-height: 300px;
+  /* Center and scale the image nicely */
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+.btn {
+  background-color: #4CAF50;
+  color: white;
+  padding: 16px 20px;
+  border: none;
+  cursor: pointer;
+  width: 8%;
+  opacity: 0.9;
 }
 </style>
 </head>
 <body>
 
 <div class="topnav">
-    <a class="inactive" href="/">PRISONXT</a>
+    <a class="active" href="getHome?category=<%= id %>'">PRISONXT</a>
     <div class="topnav-right">
         <a class="active" onclick="window.location.href='/routeBack?category=<%= id %>' ">BACK</a>                 
 		    <a class="active" onclick="window.location.href='/logout' ">LOGOUT</a>
@@ -85,22 +94,32 @@ background-size: cover;
 			  </div>
 
     </div>
-    <h1>visitors list</h1>
+  <h1>  <p align="center">Visitors list</p> </h1>
     <div class="container">
                        
             <table class="table table-hover ">
               <thead>
                 <tr>
                   <th>Visitors Name</th>
-                 <th>Delete</th>
-                 </tr>
+                  
+                  <th>Date</th>
+                  <th>Appointment Time</th>
+                  
+                  <th>Status</th>
+                  <th>Edit details</th>
+                
+                </tr>
               </thead>
               <tbody>
             <% visitors.forEach((vis) => { %>
                 <tr>
                     <td><%= vis.vfname %> <%= vis.vlname %></td>
                     
-                    <td><button onclick="window.location.href='/delete?category=<%= id %>' ">Delete</button></td>
+                    <td><%= vis.appnt_date %></td>
+                    <td><%= vis.appnt_time %></td>
+                    
+                    <td><%= vis.appnt_status %></td>
+                    <td> <button onclick="window.location.href='/editv?category=<%= id %>' ">Edit</button></td>
                 </tr>
             <% }) %>
               </tbody>
