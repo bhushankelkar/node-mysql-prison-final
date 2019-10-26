@@ -5,7 +5,7 @@ var bodyParser = require('body-parser');
 var admin_id;
 var path = require('path');
 var router=express.Router();
-global.admin_id;
+
 var connection = mysql.createConnection({
 	host     : 'localhost',
 	user     : 'root',
@@ -103,11 +103,21 @@ app.get('/editv', function(req, res) {
 app.post('/search', function(req, res) {
 		name=req.body.search;
 		
-		connection.query('select section_id from prisoners where match (pfname,lname) against (? in natural language mode)' ,[name] , function(error, results, fields) {
-			secid=results[0];
+		connection.query('select section_id from prisoners where match (pfname,lname) against (? in natural language mode)',
+		[name] , 
+		function(error, results, fields) {
+		
+	/*		 if(!results){
+				import alert from 'alert-node'
+				alert('No results found!');
+				res.render('noResults.html');
+			 }*/
+			 secid=results[0];
+			 console.log(secid);
 			connection.query('SELECT admin_id FROM section where section_id=?',secid,function(error, results, fields) {
-				adminid=results[0].admin_id;
-				connection.query('select * from prisoners where match (pfname,lname) against (? in natural language mode)' ,[name] , function(error, results, fields) {
+				adminid=results
+				connection.query('select * from prisoners where match (pfname,lname) against (? in natural language mode)' ,
+				[name] , function(error, results, fields) {
 		
 			     res.render('home.html',{id:adminid,prisoners:results,sid:secid});
 				});	
@@ -140,12 +150,9 @@ app.get('/edit', function(req, res) {
 	 datej=request.body.dou;
 	 age=request.body.age;
 	 cid=request.body.cid;
-//	 connection.query('SELECT * from prisoners where prisoner_id=?',request.query['category'],function(error,results,fields){
-	//  pid=results[0].prisoner_id;
 		if(fname && pid)
 		connection.query('UPDATE prisoners set pfname=? where prisoner_id=?',[fname,pid]); 
-	//	connection.query('UPDATE prisoners p set p.pfname=?,p.lname=?,p.prisoner_id=?,p.paddress=?,p.dateofin=?,p.dateofin=?,p.dateofout=?,p.age=? where prisoner_id=pid',[fname,lname,pid,address,datei,datej,age],function(error, results, fields){
-	    if(lname && pid) 
+		if(lname && pid) 
 		connection.query('UPDATE prisoners set lname=? where prisoner_id=?',[lname,pid]);	
 	    if(address && pid) 
 		connection.query('UPDATE prisoners set paddress=? where prisoner_id=?',[address,pid]);
@@ -157,8 +164,7 @@ app.get('/edit', function(req, res) {
 		connection.query('UPDATE prisoners set age=? where prisoner_id=?',[age,pid]);
 		if(cid && pid)
 		connection.query('UPDATE commited set case_id=? where prisoner_id=?',[cid,pid]);
-		
-	   response.redirect('/home');
+	    response.redirect('/home');
 	   response.end();
 
 });	
@@ -171,11 +177,8 @@ app.post('/updateVisitor',function(request,response){
 	appntdate=request.body.appntdate;
 	 status=request.body.status;
 	  vid=request.body.vid;
-//	 connection.query('SELECT * from prisoners where prisoner_id=?',request.query['category'],function(error,results,fields){
-	//  pid=results[0].prisoner_id;
 		if(fname && pid)
 		connection.query('UPDATE visitors set vfname=? where visitor_id=?',[fname,vid]); 
-	//	connection.query('UPDATE prisoners p set p.pfname=?,p.lname=?,p.prisoner_id=?,p.paddress=?,p.dateofin=?,p.dateofin=?,p.dateofout=?,p.age=? where prisoner_id=pid',[fname,lname,pid,address,datei,datej,age],function(error, results, fields){
 		if(lname && pid)
 		connection.query('UPDATE visitors set vlname=? where visitor_id=?',[lname,vid]); 
 	    if(appnttime && pid) 
@@ -184,15 +187,10 @@ app.post('/updateVisitor',function(request,response){
 		connection.query('UPDATE visitors set appnt_date=? where visitor_id=?',[appntdate,vid]);
 		if(status && pid) 
 		connection.query('UPDATE visitors set appnt_status=? where visitor_id=?',[status,vid]);
-	
-	//	if(vid && pid)
-	//	connection.query('UPDATE commited set visitor_id=? where visitor_id=?',[cid,vid]);
-		
-	connection.query('SELECT * FROM visitors WHERE visitor_id=?',vid, function(error, results, fields) {
+     	connection.query('SELECT * FROM visitors WHERE visitor_id=?',vid, function(error, results, fields) {
 		console.log(results);
 		response.render('visitors.html',{visitors:results,id:pid});
 		});
-
 });	
 
 
@@ -215,17 +213,13 @@ res.render('addCriminal.html',{sid:sid});
 
 app.get('/getHome', function(request,response) {
 	var prisoners=[];
-	connection.query('SELECT * FROM prisoners p where p.section_id  = (select section_id from prisoners where prisoner_id=? )',request.query['category'],
+	connection.query('SELECT * FROM prisoners p where p.section_id  = (select section_id from prisoners where prisoner_id=? )'
+	,request.query['category'],
 			function(error, results, fields) {
 			 console.log(results);
 			for(var i=0;i<=results.length-1;i++)
-			 	{prisoners.push(results[i]);
-			 		//priso.push(results[i].prisoner_id);
-			 	}
-		console.log(prisoners);
-		// for(var i=0;i<=1;i++)
-		 //		console.log(prisoners[i]);	
-	 connection.query('SELECT admin_id FROM section where section_id=?',prisoners[0].section_id,function(error, results, fields) {
+			 	{prisoners.push(results[i]);}
+			 connection.query('SELECT admin_id FROM section where section_id=?',prisoners[0].section_id,function(error, results, fields) {
 	        adminid=results[0].admin_id;
 			response.render('home.html',{id:adminid,prisoners:prisoners,sid:prisoners[0].section_id});
 
@@ -285,13 +279,13 @@ app.post('/addCase',function(request,response){
 	doc=request.body.doc;
 	toc=request.body.toc;
 	connection.query('insert into commited values(?,?)',[cid,pid],function(error,result,fields){
-							  if(error)console.log("error");
-							  connection.query('insert into cases values(?,?,?,?)',[cid,casetype,doc,toc]);
-							  connection.query('SELECT * FROM prisoners WHERE prisoner_id=?', pid , function(error, results, fields) {
-							  		response.render('prisoner.html',{prisoner:results});
-							  });
-							});
-							});
+		if(error)console.log("error");
+			connection.query('insert into cases values(?,?,?,?)',[cid,casetype,doc,toc]);
+			 connection.query('SELECT * FROM prisoners WHERE prisoner_id=?', pid , function(error, results, fields) {
+				response.render('prisoner.html',{prisoner:results});
+ 		});
+	});
+});
 		
 
 app.post('/addCriminal',function(request,response){
@@ -357,26 +351,22 @@ app.post('/auth', function(request, response) {
 router.get('/home', function(request, response) {
 var prisoners=[];
 var priso=[];
-
-// response.sendFile(path.join(__dirname + '/home.html'));
 	 if (request.session.loggedin) 
 		{
 		console.log(id);
 		connection.query('SELECT * FROM prisoners p where p.section_id  = (select  s.section_id from section s ,login l where s.admin_id=l.admin_id and l.admin_id=?)',[id],
 			function(error, results, fields) {
-			 console.log(results);
+			
 			for(var i=0;i<=results.length-1;i++)
 			 	{prisoners.push(results[i]);
-			 		//priso.push(results[i].prisoner_id);
 			 	}
-		console.log(prisoners);
 		 for(var i=0;i<=1;i++)
 		 		console.log(prisoners[i]);	
 	  response.render('home.html',{id:id,prisoners:prisoners,sid:prisoners[0].section_id});
 		 
 	});
-		
-	} else {
+	} 
+	else {
 	response.send('Please login to view this page!');
 	
 }
