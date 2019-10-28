@@ -1,6 +1,40 @@
 <!doctype html>
 <html lang="en">
     <head>
+        <script>
+            function validateForm()
+            {
+                var x= document.myForm.email.value;
+              //  var num= document.myForm.number.value;
+              // var phno=document.myForm.phno.value;
+                
+             //   var name=document.myForm.name.value;
+               var letters= /^[A-Za-z]+$/;
+                var at=x.indexOf("@");
+                var dot=x.lastIndexOf(".");
+                if(at<1||dot<at+2||dot+2>=x.length)
+                {
+                    alert("Enter valid Email \n ");
+                    return false;
+                }
+      
+               /* if(isNaN(num))
+                {
+                    document.getElementById(numloc).innerHTML ="Enter Numeric Values Only";
+                    return false;
+                }
+                if(!name.match(letters))
+                {alert(" Hey Buddy, Name cannot have numbers or special characters!")
+                  return false;
+                }
+      
+                else{
+                alert("Booking successful! Please log in to view your details.")
+                }
+               */
+                }
+            
+            </script>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 		<meta charset="utf-8">
@@ -99,7 +133,8 @@ input[type=text]:focus, input[type=password]:focus {
   float: right;
 }
 
-		</style>
+    </style>
+   
 	</head>
 	<body>
 		 <div>
@@ -113,7 +148,7 @@ input[type=text]:focus, input[type=password]:focus {
 					  </div>
 					<div class="bg-img">
 			
-			<form action="auth" method="POST" class="container">
+			<form action="auth" name="myForm" method="POST" class="container" onsubmit = "return validateForm();">
 					<h1>Login</h1>
 				<input type="text" name="email" placeholder="Email Id" required>
 				<input type="password" name="password" placeholder="Password" required>

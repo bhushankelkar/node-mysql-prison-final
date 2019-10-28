@@ -89,52 +89,45 @@ overflow: hidden;
 	<body>
 			
 				<div class="topnav">
-            <% prisoner.forEach(function(pris) { %>
-          <a class="active" href="/getHome?category=<%= pris.prisoner_id %>'">PRISONXT</a>
-          <% }); %>  
+            
+          <a class="active" href="/getHome?category=<%= id %>'">PRISONXT</a>
+     
           <div class="topnav-right">
            
-            <% prisoner.forEach(function(pris) { %>
-            <a class="active" onclick="window.location.href='/getHome?category=<%= pris.prisoner_id %>'"> BACK</a>
-          <% }); %>    
+           
+            <a class="active" onclick="window.location.href='/here?category=<%= id %>'"> BACK</a>
+           
             <a class="active" onclick="window.location.href='/logout' ">LOGOUT</a>
                             
 					</div>
-			  </div>
+              </div>
+              <h1>  <p align="center">Crime details</p> </h1>
 					<div class="container">
 							           
 							<table class="table table-hover">
 							  <thead>
 								<tr>
-								  <th>Name</th>
-								  <th>Prisoner ID</th>
-								  <th>Address</th>
-								  <th>Date of In</th>
-								  <th>Date of Out</th>
-								  <th>Age</th>
-								</tr>
+								  <th>Case ID</th>
+								  <th>Case Type</th>
+								  <th>Date of Crime</th>
+								  <th>Time of Crime(24 Hours)</th>
+								 </tr>
 							  </thead>
 							  <tbody>
-									<% prisoner.forEach(function(pris) { %>
+									<% cases.forEach(function(cis) { %>
 								<tr>
 										
-								  <td><%= pris.pfname %>  <%=pris.lname %></td>
-								  <td><%=pris.prisoner_id %></td> 
-								  <td><%=pris.paddress %></td>
-								  <td><%=pris.dateofin %></td>
-								<td><%=pris.dateofout %></td>
-								  <td><%=pris.age %></td>
-								  <td><button onclick="window.location.href='/appoint?category=<%= pris.prisoner_id %>'"> Book Appointment</button></td>
-                  <td><button onclick="window.location.href='/cdetails?category=<%= pris.prisoner_id %>'"> Crime details</button></td>
-                                  
-                                </tr>
+								  <td><%= cis.case_id %> </td>
+								  <td><%=cis.case_type %></td> 
+								  <td><%=cis.date_of_crime %></td>
+								  <td><%=cis.time_of_crime %></td>
 								
+							
+                                </tr>
+								<% }); %>
 							 </tbody>
 							 </table>
-               </div>
-               <p align="center"> <button onclick="window.location.href='/add?category=<%= pris.prisoner_id %>'">Add a case</button>
-               </p>
-               <% }); %>
+							 </div>
 							
 							  
 							  

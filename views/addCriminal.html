@@ -1,6 +1,39 @@
 <html>
 	<html lang="en">
 		<head>
+				<script>
+						function validateForm()
+						{
+							var x= document.myForm.email.value;
+							var num= document.myForm.pid.value;
+							var num= document.myForm.age.value;
+			//			   var phno=document.myForm.phno.value;
+							
+						   var name=document.myForm.fname.value;
+						   var name=document.myForm.lname.value;
+						   var letters= /^[A-Za-z]+$/;
+							var at=x.indexOf("@");
+							var dot=x.lastIndexOf(".");
+							if(at<1||dot<at+2||dot+2>=x.length)
+							{
+								alert("Enter valid email \n ");
+								return false;
+							}
+				  
+						    if(isNaN(num))
+							{
+								document.getElementById(numloc).innerHTML ="Enter Numeric Values Only";
+								return false;
+							}
+							if(!name.match(letters))		
+									{alert("Name cannot have numbers or special characters!")
+							  return false;
+							}
+							
+							
+						}
+						   
+						  </script>
 			<meta charset="utf-8">
 			<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 			<meta charset="utf-8">
@@ -98,29 +131,27 @@ color: white;
 .topnav-right {
 float: right;
 }
-
-			</style></head>
+</style></head>
 <body>
 
 <div class="topnav">
-		<a class="inactive" href="/">PRISONXT</a>
+		<a class="active" href="/">PRISONXT</a>
 		<div class="topnav-right">
-				<a href='/home'>Back</a>
+				<a class="active" href='/home'>BACK</a>
 			  </div>
 </div>
 
 <div class="bg-img">
-		<form action="addCriminal" method="POST" class="container">
+		<form action="addCriminal"name="myForm" method="POST" class="container" onsubmit = "return validateForm();">
 			<p>Add a criminal</p>
 				<input type="text" name="fname" placeholder="First name" required>
-							<input type="text" name="lname" placeholder="Last name" required>
-							<input type="number" name="pid" placeholder="prisoner id" required>
-							<input type="text" name="address" placeholder="address" />
-							
-							<input type="date" name="doi" placeholder="date of in" />
-							<input type="date" name="dou" placeholder="Date of out" />
-							<input type="number" name="age" placeholder="age" />
-							<input type="numer" name="section_id" value='<%= sid %>' placeholder="address" />
+				<input type="text" name="lname" placeholder="Last name" required>
+				<input type="number" name="pid" placeholder="prisoner id" required>
+				<input type="text" name="address" placeholder="address" />
+				<p>Date of In:<input type="date" name="doi" placeholder="date of in" /></p>
+				<p>Date of out :<input type="date" name="dou" placeholder="Date of out" /></p>
+				<input type="number" name="age" placeholder="age" />
+				<p>Section ID:<input type="numer" name="section_id" value='<%= sid %>' placeholder="address" /></p>
 							
 							<input type="submit">
 							</form>

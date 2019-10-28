@@ -98,15 +98,20 @@ overflow: hidden;
                     </div>
              </div>
              <div class="card">
-                    <% officers.forEach(function(off) {
-                        off.imag = new Buffer(off.imag).toString('base64');
-                         %> 
-                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1000&q=80"  style="width:100%"> 
-                      
-                            <h1><%= off.fname %></h1>
+                    <% officers.forEach(function(off) { %>
+                      <% if (off.admin_id == 1) { %>
+                        <img src="https://s.abcnews.com/images/US/jeff-koenig-ht-ml-190122_hpEmbed_2_4x5_992.jpg" height="300px" >
+                      <% }   if (off.admin_id == 2) { %>
+                     <img src="https://www.odmp.org/media/image/officer/24176/orig/c_juan-jose-diaz.jpg" height="300px" > 
+                  <% } if (off.admin_id == 3) { %>
+                    <img src="https://s3.amazonaws.com/ogden_images/www.theintelligencer.net/images/2018/08/23011052/Skinner-589x840.jpg" height="300px" > 
+                <%  } %>
+                     
+                  
+                     <h1><%= off.fname %></h1>
                             <p class="title"> <%= off.job_title %> </p>
                             <% }); %>
-                            <p>Vasco Jail</p>
+                            <p>Alabama Jail</p>
                            
                         </div>
                                     </div>
